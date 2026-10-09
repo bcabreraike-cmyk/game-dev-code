@@ -1,0 +1,11 @@
+scenario: tilemap-basic
+engine: godot-4
+seed: 1234
+setup:
+  - load_scene: tests/scenarios/tilemap_test
+steps:
+  - wait: {ms: 500}
+  - assert: {expr: "tilemap_node.cell_size.x == 64 and tilemap_node.cell_size.y == 64"}
+  - assert: {expr: "tilemap_node.map_size.x == 20 and tilemap_node.map_size.y == 15"}
+teardown: [quit]
+tags: [tilemap]

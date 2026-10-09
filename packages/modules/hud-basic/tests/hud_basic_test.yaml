@@ -1,0 +1,16 @@
+scenario: hud-basic-test
+engine: godot-4
+seed: 1234
+setup:
+  - load_scene: tests/scenarios/hud_basic_test
+steps:
+  - wait: {ms: 500}
+  - assert: {expr: "hud.health_label.text == 'Health: 100'"}
+  - call: {func: hud.set_health, args: [50]}
+  - wait: {ms: 100}
+  - assert: {expr: "hud.health_label.text == 'Health: 50'"}
+  - call: {func: hud.set_score, args: [150]}
+  - wait: {ms: 100}
+  - assert: {expr: "hud.score_label.text == 'Score: 150'"}
+teardown: [quit]
+tags: [hud-basic]

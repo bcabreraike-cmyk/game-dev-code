@@ -1,0 +1,15 @@
+id: run-jump-2d
+version: 1.0.0
+category: movimiento
+dimension: [2d]
+requires: [input-actions]
+conflicts: []
+params:
+  jump_height_tiles: {type: number, default: 4.5, min: 1, max: 12}
+  coyote_ms: {type: integer, default: 100}
+contract: contract.md
+impl:
+  godot-4: impl/godot-4/
+tests: tests/*.yaml
+asset_needs: [player-sprite-sheet, jump-sfx]
+default_tier_min: T0

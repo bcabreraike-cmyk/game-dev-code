@@ -1,0 +1,14 @@
+id: checkpoints
+version: 1.0.0
+category: mundo
+dimension: [2d]
+requires: []
+conflicts: []
+params:
+  auto_save: {type: boolean, default: true}
+contract: contract.md
+impl:
+  godot-4: impl/godot-4/
+tests: tests/*.yaml
+asset_needs: []
+default_tier_min: T0

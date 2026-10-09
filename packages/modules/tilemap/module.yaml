@@ -1,0 +1,17 @@
+id: tilemap
+version: 1.0.0
+category: mundo
+dimension: [2d]
+requires: []
+conflicts: []
+params:
+  tile_width: {type: number, default: 64}
+  tile_height: {type: number, default: 64}
+  columns: {type: integer, default: 20}
+  rows: {type: integer, default: 15}
+contract: contract.md
+impl:
+  godot-4: impl/godot-4/
+tests: tests/*.yaml
+asset_needs: [tileset]
+default_tier_min: T0

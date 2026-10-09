@@ -1,0 +1,10 @@
+scenario: save-load-basic
+engine: godot-4
+seed: 1234
+setup:
+  - load_scene: tests/scenarios/save-load_test
+steps:
+  - wait: {ms: 500}
+  - assert: {expr: "true"}  # placeholder
+teardown: [quit]
+tags: [save-load]

@@ -1,0 +1,14 @@
+id: stomp-enemy
+version: 1.0.0
+category: combate
+dimension: [2d]
+requires: [input-actions]
+conflicts: []
+params:
+  stomp_force: {type: number, default: 800}
+contract: contract.md
+impl:
+  godot-4: impl/godot-4/
+tests: tests/*.yaml
+asset_needs: [enemy_sprite, stomp_sfx]
+default_tier_min: T0

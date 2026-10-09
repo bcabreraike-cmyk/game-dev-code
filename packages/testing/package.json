@@ -1,0 +1,17 @@
+{
+  "name": "@ludoforge/testing",
+  "version": "0.0.1",
+  "description": "Testing utilities for Ludoforge",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^0.30.0",
+    "@types/node": "^20.0.0",
+    "js-yaml": "^4.1.0"
+  }
+}

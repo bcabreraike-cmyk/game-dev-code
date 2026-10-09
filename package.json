@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "start": "node packages/cli/index.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

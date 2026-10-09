@@ -1,0 +1,13 @@
+id: input-actions
+version: 1.0.0
+category: movimiento
+dimension: [2d, 2.5d, 3d]
+requires: []
+conflicts: []
+params: {}
+contract: contract.md
+impl:
+  godot-4: impl/godot-4/
+tests: tests/*.yaml
+asset_needs: []
+default_tier_min: T0

@@ -1,0 +1,14 @@
+scenario: input-actions-basic
+engine: godot-4
+seed: 1234
+setup:
+  - load_scene: tests/scenarios/input_actions_test
+steps:
+  - press: {action: jump, hold_ms: 200}
+  - wait: {ms: 100}
+  - assert: {expr: "Input.is_action_pressed('jump')"}
+  - release: {action: jump}
+  - wait: {ms: 100}
+  - assert: {expr: "not Input.is_action_pressed('jump')"}
+teardown: [quit]
+tags: [input-actions]

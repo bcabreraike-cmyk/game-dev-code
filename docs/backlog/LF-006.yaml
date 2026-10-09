@@ -1,0 +1,4 @@
+id: LF-006
+title: Create player movement script
+description: Create a TypeScript file that handles player movement using arrow keys or WASD.
+status: done

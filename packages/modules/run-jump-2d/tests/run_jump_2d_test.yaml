@@ -1,0 +1,14 @@
+scenario: run-jump-2d-basic
+engine: godot-4
+seed: 1234
+setup:
+  - load_scene: tests/scenarios/run_jump_2d_test
+steps:
+  - press: {action: jump, hold_ms: 400}  # long press for full jump
+  - wait: {ms: 800}
+  - assert: {expr: "player.max_height_tiles >= 4.4 and player.max_height_tiles <= 4.6"}
+  - press: {action: jump, hold_ms: 60}   # short press for small jump
+  - wait: {ms: 800}
+  - assert: {expr: "player.max_height_tiles >= 2.3 and player.max_height_tiles <= 2.7"}
+teardown: [quit]
+tags: [run-jump-2d, T-0142]

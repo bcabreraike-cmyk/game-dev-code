@@ -1,0 +1,10 @@
+scenario: camera-2d-follow-basic
+engine: godot-4
+seed: 1234
+setup:
+  - load_scene: tests/scenarios/camera_2d_follow_test
+steps:
+  - wait: {ms: 500}
+  - assert: {expr: "camera.global_position.x == target.global_position.x + offset_x and camera.global_position.y == target.global_position.y + offset_y"}
+teardown: [quit]
+tags: [camera-2d-follow]

@@ -1,0 +1,16 @@
+id: camera-2d-follow
+version: 1.0.0
+category: cámara
+dimension: [2d]
+requires: []
+conflicts: []
+params:
+  offset_x: {type: number, default: 0}
+  offset_y: {type: number, default: 0}
+  lerp_factor: {type: number, default: 0.1}
+contract: contract.md
+impl:
+  godot-4: impl/godot-4/
+tests: tests/*.yaml
+asset_needs: []
+default_tier_min: T0

@@ -1,0 +1,10 @@
+scenario: pause-menu-basic
+engine: godot-4
+seed: 1234
+setup:
+  - load_scene: tests/scenarios/pause-menu_test
+steps:
+  - wait: {ms: 500}
+  - assert: {expr: "true"}  # placeholder
+teardown: [quit]
+tags: [pause-menu]

@@ -1,0 +1,14 @@
+id: collectibles
+version: 1.0.0
+category: mundo
+dimension: [2d]
+requires: []
+conflicts: []
+params:
+  respawn_time: {type: number, default: 10.0}
+contract: contract.md
+impl:
+  godot-4: impl/godot-4/
+tests: tests/*.yaml
+asset_needs: [collectible_sprite, collect_sfx]
+default_tier_min: T0

@@ -1,0 +1,1 @@
+{"jsonrpc": "2.0", "id": 1, "method": "ludo_program_write", "params": {"ruta": "test.ts", "contenido": "console.log('hello world');"}}

@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "id": "my-game",
+  "title": "My Game",
+  "logline": "A game about things",
+  "tier": "T99",
+  "stage": "prototype",
+  "version": "0.1.0-proto.1",
+  "audience": {
+    "age_rating_target": "E10+",
+    "session_length_min": 10,
+    "experience": "casual"
+  },
+  "pillars": [
+    "movimiento preciso",
+    "niveles cortos"
+  ],
+  "references": [
+    "plataformas cl\u00e1sicas 2D"
+  ],
+  "genre": "platformer-2d",
+  "perspective": "side-scroller",
+  "dimension": "2d",
+  "style_pack": {
+    "visual": "pixel-16bit",
+    "audio": "chiptune"
+  },
+  "engine": "godot-4",
+  "platforms": [
+    "web",
+    "windows",
+    "macos"
+  ],
+  "input": [
+    "keyboard",
+    "gamepad"
+  ],
+  "mechanics": [
+    {
+      "id": "run-jump-2d",
+      "params": {
+        "jump_height_tiles": 4.5,
+        "coyote_ms": 100,
+        "buffer_ms": 100
+      }
+    }
+  ],
+  "systems": [
+    "save-load",
+    "hud",
+    "pause-menu",
+    "settings"
+  ],
+  "world": {
+    "type": "levels",
+    "count": 5,
+    "structure": "linear",
+    "theme_order": [
+      "pradera",
+      "cueva"
+    ]
+  },
+  "narrative": {
+    "level": "light",
+    "premise": "Un protagonista descubre un mundo misterioso"
+  },
+  "progression": {
+    "type": "levels",
+    "unlocks": [
+      "doble-salto@nivel3"
+    ]
+  },
+  "economy": null,
+  "ai": {
+    "enemy_types": [
+      "patrulla",
+      "volador"
+    ]
+  },
+  "multiplayer": {
+    "mode": "none"
+  },
+  "audio": {
+    "music": "generated",
+    "sfx": "generated",
+    "voice": "none"
+  },
+  "localization": {
+    "source": "es",
+    "targets": [
+      "en"
+    ]
+  },
+  "accessibility": {
+    "remap_controls": true,
+    "colorblind_mode": true,
+    "subtitles": "n/a"
+  },
+  "monetization": "none",
+  "performance": {
+    "target_fps": 60,
+    "min_hardware": "laptop-integrada-2019"
+  },
+  "constraints": [
+    "sin violencia gr\u00e1fica"
+  ],
+  "autonomy": "L2",
+  "budget": {
+    "tokens": 40000000,
+    "asset_credits_usd": 20,
+    "compute_minutes": 600
+  },
+  "risks": [
+    "curva de dificultad"
+  ],
+  "open_questions": []
+}

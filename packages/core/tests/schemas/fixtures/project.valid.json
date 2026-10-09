@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "my-game",
+  "title": "My Game",
+  "tier": "T1",
+  "stage": "prototype",
+  "version": "0.1.0-proto.1",
+  "engine": "godot-4",
+  "platforms": [
+    "web",
+    "windows",
+    "macos"
+  ],
+  "autonomy": "L2",
+  "budget": {
+    "tokens": 1000000,
+    "asset_credits_usd": 50,
+    "compute_minutes": 300
+  }
+}

@@ -1,0 +1,15 @@
+id: hud-basic
+version: 1.0.0
+category: ui
+dimension: [2d, 2.5d, 3d]
+requires: []
+conflicts: []
+params:
+  show_health: {type: boolean, default: true}
+  show_score: {type: boolean, default: true}
+contract: contract.md
+impl:
+  godot-4: impl/godot-4/
+tests: tests/*.yaml
+asset_needs: [font, health_icon, score_icon]
+default_tier_min: T0
