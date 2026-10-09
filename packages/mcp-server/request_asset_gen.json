@@ -1,0 +1,1 @@
+{"jsonrpc": "2.0", "id": 1, "method": "ludo_asset_generate_image", "params": {"ruta": "player.png", "prompt": "A cute 32x32 pixel art character, facing forward, wearing a green tunic and brown pants, holding a wooden sword.", "width": 32, "height": 32}}

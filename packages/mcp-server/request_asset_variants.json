@@ -1,0 +1,1 @@
+{"jsonrpc": "2.0", "id": 1, "method": "ludo_asset_variants", "params": {"ruta": "player.png", "cantidad": 3, "tipo": "color"}}

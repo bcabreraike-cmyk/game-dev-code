@@ -117,15 +117,25 @@ echo '{"jsonrpc":"2.0","id":1,"method":"ludo_status","params":{}}' | node dist/i
    - `ludo_program_run_test`: Simulate running tests on game logic files.
    - **Demonstrated**: Created `code/game/playerMovement.ts` for player movement (task LF-006).
 
-2. **Designer Agent** ✅ (just added)
+2. **Designer Agent** ✅
    - `ludo_design_level`: Design level layouts (JSON/CSV).
    - `ludo_design_mechanic`: Design game mechanics.
    - `ludo_design_ui_flow`: Design UI/UX flows.
    - `ludo_balance_system`: Balance game systems (difficulty, economy).
    - **Demonstrated**: Created `levels/level1.json` for the first level (task LF-007).
 
+3. **Artist Agent** ✅ (just added)
+   - `ludo_asset_generate_image`: Generate placeholder images (simulating diffusion model).
+   - `ludo_asset_edit`: Edit assets by appending notes.
+   - `ludo_asset_variants`: Generate variants of an asset (e.g., color shifts).
+   - `ludo_asset_optimize`: Optimize assets (note-based optimization).
+   - **Demonstrated**: 
+     - Generated `assets/player.png` (LF-008)
+     - Edited `assets/player.png` with a review note (LF-009)
+     - Created three variants: `assets/player_variant1.png`, `assets/player_variant2.png`, `assets/player_variant3.png` (LF-010)
+
 ### Next Steps
-- Implement the remaining agent tools for Artist, QA, and DevOps/Build agents.
+- Implement the remaining agent tools for QA and DevOps/Build agents.
 - Connect the orchestrator to automatically parse concepts and generate tasks.
 - Integrate with external AI agents (Claude Code, Codex, etc.) via the MCP server.
 - Create a CLI (`ludo`) that exposes high-level commands (`ludo new`, `ludo build`, etc.).
