@@ -627,6 +627,140 @@ handlers.set('ludo_program_run_test', async ({ ruta, prueba }, requestId) => {
         });
     }
 });
+// Tool: ludo_design_level
+handlers.set('ludo_design_level', async ({ ruta, contenido, formato = 'json' }, requestId) => {
+    // Validate ruta is a string
+    if (typeof ruta !== 'string') {
+        return makeResponse(requestId, false, null, {
+            code: "INVALID_FILE_PATH",
+            message: `File path must be a string`,
+            hint: `Provide a valid path like \`levels/level1.json\``
+        });
+    }
+    // Validate formato
+    if (formato !== 'json' && formato !== 'csv') {
+        return makeResponse(requestId, false, null, {
+            code: "INVALID_FORMAT",
+            message: `Format must be 'json' or 'csv'`,
+            hint: `Specify formato as 'json' or 'csv'`
+        });
+    }
+    try {
+        const root = path.join(__dirname, '..', '..', '..');
+        let filePath;
+        if (formato === 'json') {
+            // Ensure .json extension
+            if (!ruta.endsWith('.json')) {
+                filePath = path.join(root, 'levels', ruta + '.json');
+            }
+            else {
+                filePath = path.join(root, 'levels', ruta);
+            }
+        }
+        else { // csv
+            if (!ruta.endsWith('.csv')) {
+                filePath = path.join(root, 'levels', ruta + '.csv');
+            }
+            else {
+                filePath = path.join(root, 'levels', ruta);
+            }
+        }
+        // Ensure the directory exists
+        const dir = path.dirname(filePath);
+        await fs.mkdir(dir, { recursive: true });
+        // Write the file
+        await fs.writeFile(filePath, contenido, 'utf-8');
+        return makeResponse(requestId, true, { ruta, formato, mensaje: `Nivel diseñado exitosamente` });
+    }
+    catch (error) {
+        return makeResponse(requestId, false, null, {
+            code: "FILE_WRITE_ERROR",
+            message: `Failed to write file: ${error instanceof Error ? error.message : String(error)}`,
+            hint: `Check file path and permissions`
+        });
+    }
+});
+// Tool: ludo_design_mechanic
+handlers.set('ludo_design_mechanic', async ({ ruta, contenido }, requestId) => {
+    if (typeof ruta !== 'string') {
+        return makeResponse(requestId, false, null, {
+            code: "INVALID_FILE_PATH",
+            message: `File path must be a string`,
+            hint: `Provide a valid path like \`docs/mechanics/jump_mechanic.md\``
+        });
+    }
+    try {
+        const root = path.join(__dirname, '..', '..', '..');
+        const filePath = path.join(root, 'docs', ruta);
+        // Ensure the directory exists
+        const dir = path.dirname(filePath);
+        await fs.mkdir(dir, { recursive: true });
+        // Write the file
+        await fs.writeFile(filePath, contenido, 'utf-8');
+        return makeResponse(requestId, true, { ruta, mensaje: `Mecanismo diseñado exitosamente` });
+    }
+    catch (error) {
+        return makeResponse(requestId, false, null, {
+            code: "FILE_WRITE_ERROR",
+            message: `Failed to write file: ${error instanceof Error ? error.message : String(error)}`,
+            hint: `Check file path and permissions`
+        });
+    }
+});
+// Tool: ludo_design_ui_flow
+handlers.set('ludo_design_ui_flow', async ({ ruta, contenido }, requestId) => {
+    if (typeof ruta !== 'string') {
+        return makeResponse(requestId, false, null, {
+            code: "INVALID_FILE_PATH",
+            message: `File path must be a string`,
+            hint: `Provide a valid path like \`ui/main_menu.json\``
+        });
+    }
+    try {
+        const root = path.join(__dirname, '..', '..', '..');
+        const filePath = path.join(root, 'ui', ruta);
+        // Ensure the directory exists
+        const dir = path.dirname(filePath);
+        await fs.mkdir(dir, { recursive: true });
+        // Write the file
+        await fs.writeFile(filePath, contenido, 'utf-8');
+        return makeResponse(requestId, true, { ruta, mensaje: `Flujo de UI diseñado exitosamente` });
+    }
+    catch (error) {
+        return makeResponse(requestId, false, null, {
+            code: "FILE_WRITE_ERROR",
+            message: `Failed to write file: ${error instanceof Error ? error.message : String(error)}`,
+            hint: `Check file path and permissions`
+        });
+    }
+});
+// Tool: ludo_balance_system
+handlers.set('ludo_balance_system', async ({ ruta, contenido }, requestId) => {
+    if (typeof ruta !== 'string') {
+        return makeResponse(requestId, false, null, {
+            code: "INVALID_FILE_PATH",
+            message: `File path must be a string`,
+            hint: `Provide a valid path like \`docs/balance/economy.yaml\``
+        });
+    }
+    try {
+        const root = path.join(__dirname, '..', '..', '..');
+        const filePath = path.join(root, 'docs', ruta);
+        // Ensure the directory exists
+        const dir = path.dirname(filePath);
+        await fs.mkdir(dir, { recursive: true });
+        // Write the file
+        await fs.writeFile(filePath, contenido, 'utf-8');
+        return makeResponse(requestId, true, { ruta, mensaje: `Sistema de balance diseñado exitosamente` });
+    }
+    catch (error) {
+        return makeResponse(requestId, false, null, {
+            code: "FILE_WRITE_ERROR",
+            message: `Failed to write file: ${error instanceof Error ? error.message : String(error)}`,
+            hint: `Check file path and permissions`
+        });
+    }
+});
 // Standard input/output handling
 const node_process_1 = require("node:process");
 const node_readline_1 = require("node:readline");

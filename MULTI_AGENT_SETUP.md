@@ -106,3 +106,28 @@ echo '{"jsonrpc":"2.0","id":1,"method":"ludo_status","params":{}}' | node dist/i
 
 ---
 *This setup follows the YAGNI and minimal code principles, providing a working foundation that can be extended iteratively.*
+
+## Progress Made (as of last commit)
+
+### Agent Tools Implemented
+1. **Programer Agent** ✅
+   - `ludo_program_write`: Write TypeScript/JavaScript game logic files.
+   - `ludo_program_edit`: Edit existing game logic files.
+   - `ludo_program_lint`: Lint game logic files (basic checks).
+   - `ludo_program_run_test`: Simulate running tests on game logic files.
+   - **Demonstrated**: Created `code/game/playerMovement.ts` for player movement (task LF-006).
+
+2. **Designer Agent** ✅ (just added)
+   - `ludo_design_level`: Design level layouts (JSON/CSV).
+   - `ludo_design_mechanic`: Design game mechanics.
+   - `ludo_design_ui_flow`: Design UI/UX flows.
+   - `ludo_balance_system`: Balance game systems (difficulty, economy).
+   - **Demonstrated**: Created `levels/level1.json` for the first level (task LF-007).
+
+### Next Steps
+- Implement the remaining agent tools for Artist, QA, and DevOps/Build agents.
+- Connect the orchestrator to automatically parse concepts and generate tasks.
+- Integrate with external AI agents (Claude Code, Codex, etc.) via the MCP server.
+- Create a CLI (`ludo`) that exposes high-level commands (`ludo new`, `ludo build`, etc.).
+- Add support for generating complete games from simple concept strings.
+
