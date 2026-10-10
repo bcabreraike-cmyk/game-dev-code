@@ -1,0 +1,4 @@
+id: LF-004
+title: Create input handling system
+description: Handle keyboard input for paddle movement.
+status: todo

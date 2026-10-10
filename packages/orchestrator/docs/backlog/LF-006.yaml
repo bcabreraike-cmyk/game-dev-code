@@ -1,0 +1,4 @@
+id: LF-006
+title: Generate paddle sprite
+description: Create a 32x32 pixel art sprite for the paddle.
+status: todo

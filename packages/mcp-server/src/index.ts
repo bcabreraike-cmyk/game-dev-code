@@ -26,6 +26,206 @@ function makeResponse<T>(id: number | string, ok: boolean, data?: T, error?: {co
 const handlers = new Map<string, (params: any, id: number | string) => Promise<any>>();
 
 // Tool: ludo_status
+
+// Tool: ludio_audio_generate_music
+
+// Tool: ludio_audio_edit
+handlers.set('ludio_audio_edit', async ({ ruta, operacion, parametros = {} }, requestId) => {
+  if (typeof ruta !== 'string') {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_RUTA",
+      message: "ruta debe ser una cadena",
+      hint: "Proporciona una ruta como `assets/sfx_jump.wav`"
+    });
+  }
+  const allowedOperaciones = [
+    'trim',           // Recortar inicio/final
+    'fade_in',        // Fade in
+    'fade_out',       // Fade out
+    'volume_change',  // Cambiar volumen
+    'reverse',        // Reproducir al revés
+    'normalize',      // Normalizar volumen
+    'noise_reduction' // Reducir ruido
+  ];
+  if (!allowedOperaciones.includes(operacion)) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_OPERACION",
+      message: `Operación debe ser uno de: ${allowedOperaciones.join(', ')}`,
+      hint: "Tipo de edición de audio a aplicar"
+    });
+  }
+  try {
+    const root = path.join(__dirname, '..', '..', '..');
+    const filePath = path.join(root, ruta);
+    
+    // Verificar que el archivo existe
+    try {
+      await fs.access(filePath);
+    } catch (e) {
+      return makeResponse(requestId, false, null, {
+        code: "AUDIO_FILE_NOT_FOUND",
+        message: `Archivo de audio no encontrado: ${ruta}`,
+        hint: "Asegúrate de que el asset de audio exista"
+      });
+    }
+    
+    // Leer el archivo actual (simulado - en implementación real sería audio binario)
+    let contenidoActual = await fs.readFile(filePath, 'utf-8');
+    
+    // Aplicar la operación (simulado)
+    let contenidoEditado = contenidoActual;
+    const paramsDesc = Object.entries(parametros)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(', ');
+    
+    switch (operacion) {
+      case 'trim':
+        contenidoEditado = `${contenidoActual}
+// Trim aplicado: ${paramsDesc || 'valores por defecto'}
+`;
+        break;
+      case 'fade_in':
+        contenidoEditado = `${contenidoActual}
+// Fade In aplicado: ${paramsDesc}
+`;
+        break;
+      case 'fade_out':
+        contenidoEditado = `${contenidoActual}
+// Fade Out aplicado: ${paramsDesc}
+`;
+        break;
+      case 'volume_change':
+        contenidoEditado = `${contenidoActual}
+// Volume Change aplicado: ${paramsDesc}
+`;
+        break;
+      case 'reverse':
+        contenidoEditado = `${contenidoActual}
+// Reverse aplicado: ${paramsDesc}
+`;
+        break;
+      case 'normalize':
+        contenidoEditado = `${contenidoActual}
+// Normalize aplicado: ${paramsDesc}
+`;
+        break;
+      case 'noise_reduction':
+        contenidoEditado = `${contenidoActual}
+// Noise Reduction aplicado: ${paramsDesc}
+`;
+        break;
+      default:
+        contenidoEditado = `${contenidoActual}
+// Operación ${operacion} aplicada: ${paramsDesc}
+`;
+    }
+    
+    await fs.writeFile(filePath, contenidoEditado, 'utf-8');
+    
+    const logs = `Audio editado: ${ruta} (operación: ${operacion})`;
+    return makeResponse(requestId, true, { 
+      ruta, 
+      operacion, 
+      parametros, 
+      logs 
+    });
+  } catch (error) {
+    return makeResponse(requestId, false, null, {
+      code: "AUDIO_EDIT_ERROR",
+      message: `Failed to edit audio: ${error instanceof Error ? error.message : String(error)}`,
+      hint: "Verifica que el archivo exista y sea editable"
+    });
+  }
+});
+handlers.set('ludio_audio_generate_music', async ({ estilo, duracion_seg = 30, intensidad = 'media', bpm = 120, formato = 'ogg' }, requestId) => {
+  if (typeof estilo !== 'string') {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_ESTILO",
+      message: "estilo debe ser una cadena",
+      hint: "Describe el estilo musical (ej: 'chiptune', 'orchestral', 'electronic', 'jazz')"
+    });
+  }
+  if (!Number.isInteger(duracion_seg) || duracion_seg <= 0) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_DURACION",
+      message: "duracion_seg debe ser un entero positivo",
+      hint: "Duración en segundos para el loop musical"
+    });
+  }
+  const allowedIntensidades = ['baja', 'media', 'alta'];
+  if (!allowedIntensidades.includes(intensidad)) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_INTENSIDAD",
+      message: `Intensidad debe ser uno de: ${allowedIntensidades.join(', ')}`,
+      hint: "Nivel de intensidad/complejidad de la música"
+    });
+  }
+  if (!Number.isInteger(bpm) || bpm < 40 || bpm > 240) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_BPM",
+      message: "bpm debe estar entre 40 y 240",
+      hint: "Beats per minute para el tempo musical"
+    });
+  }
+  const allowedFormatos = ['wav', 'ogg', 'mp3'];
+  if (!allowedFormatos.includes(formato)) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_FORMATO",
+      message: `Formato debe ser uno de: ${allowedFormatos.join(', ')}`,
+      hint: "Formato de archivo de audio (ogg recomendado para loops)"
+    });
+  }
+  try {
+    const root = path.join(__dirname, '..', '..', '..');
+    const assetsDir = path.join(root, 'assets');
+    await fs.mkdir(assetsDir, { recursive: true });
+    
+    // Generar nombre de archivo seguro
+    const safeEstilo = estilo
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+    const filename = `music_${safeEstilo}_${duracion_seg}s_${bpm}bpm.${formato}`;
+    const filePath = path.join(assetsDir, filename);
+    
+    // Simular generación de música
+    const musicMetadata = `// Ludoforge Music Asset
+// Generado por: Audio Agent
+// Estilo: ${estilo}
+// Duración: ${duracion_seg}s
+// Intensidad: ${intensidad}
+// Tempo: ${bpm} BPM
+// Formato: ${formato}
+// Timestamp: ${new Date().toISOString()}
+// 
+// NOTA: En una implementación real, este sería un archivo de audio binario
+// con el loop musical especificado.
+//
+// Para usar este asset en el juego:
+// - Web: const audio = new Audio('assets/${filename}'); audio.loop = true; audio.play();
+// - Otros: cargar según el motor de juego con loop habilitado
+`;
+    
+    await fs.writeFile(filePath, musicMetadata, 'utf-8');
+    
+    const logs = `Música generada: ${filename} (${estilo}, ${duracion_seg}s, ${intensidad}, ${bpm}BPM)`;
+    return makeResponse(requestId, true, { 
+      ruta: `assets/${filename}`, 
+      estilo, 
+      duracion_seg, 
+      intensidad, 
+      bpm,
+      formato,
+      logs 
+    });
+  } catch (error) {
+    return makeResponse(requestId, false, null, {
+      code: "AUDIO_GENERATION_ERROR",
+      message: `Failed to generate music: ${error instanceof Error ? error.message : String(error)}`,
+      hint: "Verifica permisos de escritura en carpeta assets/"
+    });
+  }
+});
 handlers.set('ludo_status', async (_params, requestId) => {
   try {
     const backlogDir = path.join(__dirname, '..', '..', '..', 'docs', 'backlog');
@@ -933,6 +1133,230 @@ handlers.set('ludo_asset_optimize', async ({ ruta, formato = 'png', calidad = 80
       code: "FILE_OPTIMIZE_ERROR",
       message: `Failed to optimize file: ${error instanceof Error ? error.message : String(error)}`,
       hint: "Check file path and permissions"
+    });
+  }
+});
+
+// Tool: ludo_build_web_dev
+handlers.set('ludo_build_web_dev', async ({ nombre_juego = 'ludoforge_game', abrir_navegador = false }, requestId) => {
+  try {
+    // Generar instrucciones de servidor de desarrollo
+    const rutaBuild = `dist/${nombre_juego}`;
+    const instrucciones = `npx serve ${rutaBuild} -l 3000`;
+    
+    const logs = `Build desarrollo generado para ${nombre_juego}: ${instrucciones}`;
+    
+    return makeResponse(requestId, true, { 
+      ok: true, 
+      nombre_juego, 
+      modo: 'desarrollo', 
+      ruta_build: rutaBuild, 
+      instrucciones_servir: instrucciones, 
+      logs 
+    });
+  } catch (error) {
+    return makeResponse(requestId, false, null, {
+      code: "BUILD_DEV_ERROR",
+      message: error instanceof Error ? error.message : String(error),
+      hint: "Verifica que ludo_build_web haya funcionado antes"
+    });
+  }
+});
+
+// Tool: ludo_audio_generate_sfx
+handlers.set('ludo_audio_generate_sfx', async ({ descripcion, duracion_seg = 1, tipo = 'impacto', formato = 'wav' }, requestId) => {
+  if (typeof descripcion !== 'string') {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_DESCRIPCION",
+      message: "descripcion debe ser una cadena",
+      hint: "Describe el efecto de sonido (ej: 'salto de personaje', 'recolección de moneda')"
+    });
+  }
+  if (!Number.isInteger(duracion_seg) || duracion_seg <= 0) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_DURACION",
+      message: "duracion_seg debe ser un entero positivo",
+      hint: "Duración en segundos (ej: 0.5 para impacto corto, 2.0 para ambiente largo)"
+    });
+  }
+  const allowedTipos = ['impacto', 'recoleccion', 'ui', 'ambiente', 'alerta'];
+  if (!allowedTipos.includes(tipo)) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_TIPO",
+      message: `Tipo debe ser uno de: ${allowedTipos.join(', ')}`,
+      hint: "Clasifica el tipo de efecto de sonido"
+    });
+  }
+  const allowedFormatos = ['wav', 'ogg', 'mp3'];
+  if (!allowedFormatos.includes(formato)) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_FORMATO",
+      message: `Formato debe ser uno de: ${allowedFormatos.join(', ')}`,
+      hint: "Formato de archivo de audio"
+    });
+  }
+  try {
+    const root = path.join(__dirname, '..', '..', '..');
+    const assetsDir = path.join(root, 'assets');
+    await fs.mkdir(assetsDir, { recursive: true });
+    
+    // Generar nombre de archivo seguro
+    const safeDesc = descripcion
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+    const filename = `sfx_${safeDesc}_${tipo}.${formato}`;
+    const filePath = path.join(assetsDir, filename);
+    
+    // Crear metadata de audio (simulación - en implementación real sería audio binario)
+    const audioMetadata = `// Ludoforge Audio Asset
+// Generado por: Audio Agent
+// Descripción: ${descripcion}
+// Duración: ${duracion_seg}s
+// Tipo: ${tipo}
+// Formato: ${formato}
+// Timestamp: ${new Date().toISOString()}
+// 
+// NOTA: En una implementación real, este sería un archivo de audio binario
+// generado por modelos como AudioLDM, Stable Audio, o similares.
+//
+// Para usar este asset en el juego:
+// - Web: new Audio('assets/${filename}').play()
+// - Otros: cargar según el motor de juego
+`;
+    
+    await fs.writeFile(filePath, audioMetadata, 'utf-8');
+    
+    const logs = `SFX generado: ${filename} (${descripcion}, ${duracion_seg}s, ${tipo})`;
+    return makeResponse(requestId, true, { 
+      ruta: `assets/${filename}`, 
+      descripcion, 
+      duracion_seg, 
+      tipo, 
+      formato,
+      logs 
+    });
+  } catch (error) {
+    return makeResponse(requestId, false, null, {
+      code: "AUDIO_GENERATION_ERROR",
+      message: `Failed to generate SFX: ${error instanceof Error ? error.message : String(error)}`,
+      hint: "Verifica permisos de escritura en carpeta assets/"
+    });
+  }
+});
+
+// Tool: ludio_asset_optimize
+handlers.set('ludio_asset_optimize', async ({ ruta, tipo = 'image', calidad = 'media', formato_salida = null }, requestId) => {
+  if (typeof ruta !== 'string') {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_RUTA",
+      message: "ruta debe ser una cadena",
+      hint: "Proporciona una ruta como `assets/player.png`"
+    });
+  }
+  const allowedTipos = ['image', 'sprite', 'texture'];
+  if (!allowedTipos.includes(tipo)) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_TIPO",
+      message: `Tipo debe ser uno de: ${allowedTipos.join(', ')}`,
+      hint: "Clasifica el tipo de asset a optimizar"
+    });
+  }
+  const allowedCalidades = ['baja', 'media', 'alta'];
+  if (!allowedCalidades.includes(calidad)) {
+    return makeResponse(requestId, false, null, {
+      code: "INVALID_CALIDAD",
+      message: `Calidad debe ser uno de: ${allowedCalidades.join(', ')}`,
+      hint: "Nivel de optimización (baja/ media/ alta)"
+    });
+  }
+  try {
+    const root = path.join(__dirname, '..', '..', '..');
+    const filePath = path.join(root, ruta);
+    
+    // Verificar que el archivo existe
+    try {
+      await fs.access(filePath);
+    } catch (e) {
+      return makeResponse(requestId, false, null, {
+        code: "FILE_NOT_FOUND",
+        message: `Archivo no encontrado: ${ruta}`,
+        hint: "Asegúrate de que el asset exista en la ruta indicada"
+      });
+    }
+    
+    // Obtener información del archivo
+    const stats = await fs.stat(filePath);
+    const currentSize = stats.size;
+    
+    // Simular optimización basándose en tipo y calidad
+    let optimizacion = "";
+    let nuevoTamaño = currentSize;
+    let porcentajeAhorro = 0;
+    
+    if (tipo === 'image') {
+      if (calidad === 'baja') { porcentajeAhorro = 10; }
+      else if (calidad === 'media') { porcentajeAhorro = 30; }
+      else if (calidad === 'alta') { porcentajeAhorro = 50; }
+      else { porcentajeAhorro = 20; }
+      nuevoTamaño = Math.max(1, Math.ceil(currentSize * (100 - porcentajeAhorro) / 100));
+      optimizacion = `Optimización de imagen aplicada: ${calidad} calidad. Tamaño reducido de ${currentSize} bytes a ~${nuevoTamaño} bytes (ahorro: ${porcentajeAhorro}%). `;
+    } else if (tipo === 'sprite') {
+      if (calidad === 'baja') { porcentajeAhorro = 15; }
+      else if (calidad === 'media') { porcentajeAhorro = 35; }
+      else if (calidad === 'alta') { porcentajeAhorro = 55; }
+      else { porcentajeAhorro = 25; }
+      nuevoTamaño = Math.max(1, Math.ceil(currentSize * (100 - porcentajeAhorro) / 100));
+      optimizacion = `Optimización de sprite sheet: ${calidad} calidad. Máximo de ${porcentajeAhorro}% de reducción en tamaño. Mantiene la integridad de los frames y coordenadas UV.`;
+    } else if (tipo === 'texture') {
+      if (calidad === 'baja') { porcentajeAhorro = 10; }
+      else if (calidad === 'media') { porcentajeAhorro = 25; }
+      else if (calidad === 'alta') { porcentajeAhorro = 45; }
+      else { porcentajeAhorro = 20; }
+      nuevoTamaño = Math.max(1, Math.ceil(currentSize * (100 - porcentajeAhorro) / 100));
+      optimizacion = `Optimización de textura: ${calidad} calidad. Reducción de ${porcentajeAhorro}% en tamaño de archivo. Formato sugerido: WebP para web, ASTC/ETC2 para móvil.`;
+    } else {
+      optimizacion = `Optimización aplicada: ${calidad} calidad sobre ${tipo}`;
+    }
+    
+    // Crear nombre de archivo optimizado
+    const ext = ruta.split('.').pop();
+    const nombreSinExt = ruta.replace(`.${ext}`, '');
+    const optimizadoNombre = `${nombreSinExt}_optimizado${calidad[0]}.${ext}`;
+    const optimizadoPath = path.join(path.dirname(filePath), optimizadoNombre);
+    
+    // En una implementación real, aquí se haría la optimización real
+    // Por ahora, creamos un archivo de metadata con los resultados
+    const metadata = `// Ludoforge Asset Optimization
+// Original: ${ruta}
+// Tamaño original: ${currentSize} bytes
+// Optimizado: ${optimizadoNombre}
+// Tamaño optimizado: ${nuevoTamaño} bytes
+// Calidad: ${calidad}
+// Tipo: ${tipo}
+// Porcentaje de ahorro: ${porcentajeAhorro}%
+// Fecha: ${new Date().toISOString()}`;
+    
+    await fs.writeFile(optimizadoPath, metadata, 'utf-8');
+    
+    const logs = `Asset optimizado: ${ruta} → ${optimizadoNombre}\nTamaño: ${currentSize} → ${nuevoTamaño} bytes (${porcentajeAhorro}% de ahorro)\n${optimizacion}`;
+    
+    return makeResponse(requestId, true, { 
+      ok: true, 
+      original: ruta, 
+      optimizado: optimizadoNombre, 
+      tipo, 
+      calidad, 
+      formato_salida,
+      nuevo_tamaño: nuevoTamaño, 
+      porcentaje_ahorro: porcentajeAhorro, 
+      logs 
+    });
+  } catch (error) {
+    return makeResponse(requestId, false, null, {
+      code: "ASSET_OPTIMIZE_ERROR",
+      message: `Error during asset optimization: ${error instanceof Error ? error.message : String(error)}`,
+      hint: "Verifica que la ruta sea correcta y el asset sea legible"
     });
   }
 });

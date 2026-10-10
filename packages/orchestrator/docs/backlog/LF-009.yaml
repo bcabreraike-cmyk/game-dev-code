@@ -1,0 +1,4 @@
+id: LF-009
+title: Implement scoring system
+description: Track and display the score based on hits or bricks destroyed.
+status: todo

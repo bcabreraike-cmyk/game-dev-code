@@ -1,0 +1,4 @@
+id: LF-005
+title: Create rendering loop
+description: Set up the main game loop with requestAnimationFrame for smooth rendering.
+status: todo

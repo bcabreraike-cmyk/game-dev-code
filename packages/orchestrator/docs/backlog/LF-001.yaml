@@ -1,0 +1,4 @@
+id: LF-001
+title: Create paddle movement script
+description: Implement paddle movement using keyboard input (arrow keys or WASD).
+status: todo

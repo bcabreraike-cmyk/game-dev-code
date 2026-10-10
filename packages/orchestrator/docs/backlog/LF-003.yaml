@@ -1,0 +1,4 @@
+id: LF-003
+title: Create collision detection system
+description: Detect collisions between ball and paddle, and ball and bricks/walls.
+status: todo

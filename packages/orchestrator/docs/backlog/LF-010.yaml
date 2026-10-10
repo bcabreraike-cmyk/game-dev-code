@@ -1,0 +1,4 @@
+id: LF-010
+title: Add sound effects
+description: Add basic sound effects for paddle hit, ball wall bounce, and brick break.
+status: todo

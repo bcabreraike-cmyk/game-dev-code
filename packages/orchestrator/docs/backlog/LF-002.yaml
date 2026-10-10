@@ -1,0 +1,4 @@
+id: LF-002
+title: Create ball physics script
+description: Implement ball movement, bouncing off walls and paddle.
+status: todo
